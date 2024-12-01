@@ -2,10 +2,16 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { TrackController } from './track.controller';
 import { TrackService } from './track.service';
 import { TrackRequestDto } from './dto/track-request.dto';
+import { RedisFacadeService } from '../redis/redis-facade.service';
+import { ZodValidationPipe } from '../pipe/zod-validation.pipe';
 
 describe('TrackController', () => {
   let controller: TrackController;
-  let trackServiceMock: jest.Mocked<TrackService>;
+  let trackServiceMock: Partial<TrackService>;
+  let redisFacadeServiceMock: {
+    appendCount: jest.Mock<any, any, any>;
+    getCount: jest.Mock<any, any, any>;
+  };
 
   beforeEach(async () => {
     trackServiceMock = {
@@ -13,7 +19,11 @@ describe('TrackController', () => {
       fileService: {
         append: jest.fn(),
       },
-      filePath: '/mock/path',
+    };
+
+    redisFacadeServiceMock = {
+      appendCount: jest.fn(),
+      getCount: jest.fn(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -23,6 +33,11 @@ describe('TrackController', () => {
           provide: TrackService,
           useValue: trackServiceMock,
         },
+        {
+          provide: RedisFacadeService,
+          useValue: redisFacadeServiceMock,
+        },
+        ZodValidationPipe,
       ],
     }).compile();
 
@@ -31,6 +46,21 @@ describe('TrackController', () => {
 
   it('should be defined', () => {
     expect(controller).toBeDefined();
+  });
+
+  it('should call RedisFacadeService.appendCount when trackRequest is called', async () => {
+    const trackRequestDto: TrackRequestDto = {
+      id: 1,
+      count: 42,
+      content: 'some testing content',
+    };
+
+    await controller.trackRequest(trackRequestDto);
+
+    expect(redisFacadeServiceMock.appendCount).toHaveBeenCalledWith(
+      trackRequestDto,
+    );
+    expect(redisFacadeServiceMock.appendCount).toHaveBeenCalledTimes(1);
   });
 
   it('should call TrackService.appendToFile when trackRequest is called', async () => {

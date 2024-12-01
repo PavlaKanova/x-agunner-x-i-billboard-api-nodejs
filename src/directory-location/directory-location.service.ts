@@ -6,7 +6,7 @@ import * as path from 'node:path';
 export class DirectoryLocationService {
   constructor(readonly configService: ConfigService) {}
 
-  private getRootDirPath(): string {
+  getRootDirPath(): string {
     const rootDirPath = this.configService.get<string>(
       'ABSOLUTE_DIR_PATH_ROOT',
       {

@@ -5,6 +5,7 @@ import { TrackModule } from './track/track.module';
 import { FileModule } from './file/file.module';
 import { ConfigModule } from '@nestjs/config';
 import { DirectoryLocationModule } from './directory-location/directory-location.module';
+import { RedisModule } from './redis/redis.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { DirectoryLocationModule } from './directory-location/directory-location
     FileModule,
     ConfigModule.forRoot({ envFilePath: ['.env.local', '.env.global'] }),
     DirectoryLocationModule,
+    RedisModule,
   ],
   controllers: [AppController],
   providers: [AppService],

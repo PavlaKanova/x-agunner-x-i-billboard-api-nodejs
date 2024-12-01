@@ -11,3 +11,9 @@ services:
     ports:
       - "3000:3000"
     command: npm run start:dev
+
+  redis:
+    image: redis:7
+    container_name: i-billboard-redis
+    ports:
+      - "6379:6379"
