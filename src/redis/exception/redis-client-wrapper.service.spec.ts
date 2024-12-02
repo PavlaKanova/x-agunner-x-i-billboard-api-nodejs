@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { RedisClientWrapperService } from './redis-client-wrapper.service';
-import { RedisConfigService } from './redis-config.service';
+import { RedisClientWrapperService } from '../redis-client-wrapper.service';
+import { RedisConfigService } from '../redis-config.service';
 import { createClient, RedisClientType } from 'redis';
 
 jest.mock('redis', () => ({

@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { FileService } from './file.service';
 import { appendFile, mkdir } from 'fs/promises';
-import { DirectoryNotExistException } from './directory-not-exist.exception';
-import { UnableToAppendToFileException } from './unable-to-append-to-file.exception';
+import { DirectoryNotExistException } from './exception/directory-not-exist.exception';
+import { UnableToAppendToFileException } from './exception/unable-to-append-to-file.exception';
 
 jest.mock('fs/promises');
 

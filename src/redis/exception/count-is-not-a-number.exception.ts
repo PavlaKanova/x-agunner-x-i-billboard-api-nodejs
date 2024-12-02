@@ -1,5 +1,5 @@
 import { InternalServerErrorException } from '@nestjs/common';
-import { RedisKey } from './redis-key.enum';
+import { RedisKey } from '../redis-key.enum';
 
 export class CountIsNotANumberException extends InternalServerErrorException {
   private constructor() {

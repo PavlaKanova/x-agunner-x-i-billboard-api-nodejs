@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { RedisClientWrapperService } from './redis-client-wrapper.service';
 import { TrackRequestDto } from '../track/dto/track-request.dto';
 import { RedisKey } from './redis-key.enum';
-import { CountIsNotANumberException } from './count-is-not-a-number.exception';
+import { CountIsNotANumberException } from './exception/count-is-not-a-number.exception';
 
 @Injectable()
 export class RedisFacadeService {

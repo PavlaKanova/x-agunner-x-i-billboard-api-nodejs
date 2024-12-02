@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { RedisConfigService } from './redis-config.service';
 import { createClient, RedisClientType } from 'redis';
-import { FailedToIncreaseByException } from './failed-to-increase-by.exception';
-import { FailedToGetValueException } from './failed-to-get-value.exception';
+import { FailedToIncreaseByException } from './exception/failed-to-increase-by.exception';
+import { FailedToGetValueException } from './exception/failed-to-get-value.exception';
 
 @Injectable()
 export class RedisClientWrapperService {

@@ -3,7 +3,7 @@ import { RedisFacadeService } from './redis-facade.service';
 import { RedisClientWrapperService } from './redis-client-wrapper.service';
 import { RedisKey } from './redis-key.enum';
 import { TrackRequestDto } from '../track/dto/track-request.dto';
-import { CountIsNotANumberException } from './count-is-not-a-number.exception';
+import { CountIsNotANumberException } from './exception/count-is-not-a-number.exception';
 
 jest.mock('./redis-client-wrapper.service');
 
