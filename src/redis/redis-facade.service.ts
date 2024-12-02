@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { RedisClientWrapperService } from './redis-client-wrapper.service';
 import { TrackRequestDto } from '../track/dto/track-request.dto';
 import { RedisKey } from './redis-key.enum';
+import { CountIsNotANumberException } from './count-is-not-a-number.exception';
 
 @Injectable()
 export class RedisFacadeService {
@@ -16,8 +17,14 @@ export class RedisFacadeService {
     }
   }
 
-  async getCount(): Promise<number | null> {
+  async getCount(): Promise<number> {
     const count = await this.redisClientService.get(RedisKey.COUNT);
-    return count ? parseInt(count, 10) : null;
+
+    const parsedCount = count ? parseInt(count, 10) : 0;
+    if (isNaN(parsedCount)) {
+      throw CountIsNotANumberException.create();
+    }
+
+    return parsedCount;
   }
 }

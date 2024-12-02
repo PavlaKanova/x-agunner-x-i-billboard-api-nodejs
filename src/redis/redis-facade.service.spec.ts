@@ -3,6 +3,7 @@ import { RedisFacadeService } from './redis-facade.service';
 import { RedisClientWrapperService } from './redis-client-wrapper.service';
 import { RedisKey } from './redis-key.enum';
 import { TrackRequestDto } from '../track/dto/track-request.dto';
+import { CountIsNotANumberException } from './count-is-not-a-number.exception';
 
 jest.mock('./redis-client-wrapper.service');
 
@@ -77,12 +78,26 @@ describe('RedisFacadeService', () => {
       );
     });
 
-    it('should return null if Redis returns null or an invalid value', async () => {
+    it('should throw CountIsNotANumberException when Redis returns an invalid value', async () => {
+      const invalidCount = 'invalid';
+      (redisClientWrapperServiceMock.get as jest.Mock).mockResolvedValue(
+        invalidCount,
+      );
+
+      await expect(service.getCount()).rejects.toThrow(
+        CountIsNotANumberException.create(),
+      );
+      expect(redisClientWrapperServiceMock.get).toHaveBeenCalledWith(
+        RedisKey.COUNT,
+      );
+    });
+
+    it('should return 0 if Redis returns an empty or null value', async () => {
       (redisClientWrapperServiceMock.get as jest.Mock).mockResolvedValue(null);
 
       const result = await service.getCount();
 
-      expect(result).toBeNull();
+      expect(result).toBe(0);
       expect(redisClientWrapperServiceMock.get).toHaveBeenCalledWith(
         RedisKey.COUNT,
       );

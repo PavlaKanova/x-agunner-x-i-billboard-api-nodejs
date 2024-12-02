@@ -7,6 +7,7 @@ import { ConfigModule } from '@nestjs/config';
 import { DirectoryLocationModule } from './directory-location/directory-location.module';
 import { RedisModule } from './redis/redis.module';
 import { WinstonLoggerService } from './logger/winston-logger.service';
+import { CountModule } from './count/count.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { WinstonLoggerService } from './logger/winston-logger.service';
     ConfigModule.forRoot({ envFilePath: ['.env.local', '.env.global'] }),
     DirectoryLocationModule,
     RedisModule,
+    CountModule,
   ],
   controllers: [AppController],
   providers: [

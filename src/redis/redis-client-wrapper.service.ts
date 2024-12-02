@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { RedisConfigService } from './redis-config.service';
 import { createClient, RedisClientType } from 'redis';
+import { FailedToIncreaseByException } from './failed-to-increase-by.exception';
+import { FailedToGetValueException } from './failed-to-get-value.exception';
 
 @Injectable()
 export class RedisClientWrapperService {
@@ -21,10 +23,18 @@ export class RedisClientWrapperService {
   }
 
   async increaseBy(key: string, value: number): Promise<void> {
-    await this.client.incrBy(key, value);
+    try {
+      await this.client.incrBy(key, value);
+    } catch (error) {
+      throw FailedToIncreaseByException.fromError(error);
+    }
   }
 
   async get(key: string): Promise<string | null> {
-    return this.client.get(key);
+    try {
+      return this.client.get(key);
+    } catch (error) {
+      throw FailedToGetValueException.fromError(error);
+    }
   }
 }
