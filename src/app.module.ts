@@ -6,6 +6,7 @@ import { FileModule } from './file/file.module';
 import { ConfigModule } from '@nestjs/config';
 import { DirectoryLocationModule } from './directory-location/directory-location.module';
 import { RedisModule } from './redis/redis.module';
+import { WinstonLoggerService } from './logger/winston-logger.service';
 
 @Module({
   imports: [
@@ -16,6 +17,15 @@ import { RedisModule } from './redis/redis.module';
     RedisModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    WinstonLoggerService,
+    {
+      provide: 'WinstonLogger',
+      useFactory: (winstonLoggerService: WinstonLoggerService) =>
+        winstonLoggerService.createLogger(),
+      inject: [WinstonLoggerService],
+    },
+  ],
 })
 export class AppModule {}

@@ -96,4 +96,54 @@ describe('DirectoryLocationService', () => {
       );
     });
   });
+
+  describe('getLogDirPath', () => {
+    it('should return resolved logs directory path when both DIR_PATH_LOGS and ABSOLUTE_DIR_PATH_ROOT are defined', () => {
+      const mockRootPath = '/mock/root';
+      const mockLogsPath = 'logs/path';
+      configServiceMock.get.mockImplementation((key) => {
+        if (key === 'ABSOLUTE_DIR_PATH_ROOT') return mockRootPath;
+        if (key === 'DIR_PATH_LOGS') return mockLogsPath;
+        return undefined;
+      });
+
+      const result = service.getLogDirPath();
+
+      expect(result).toBe(path.resolve(mockRootPath, mockLogsPath));
+      expect(configServiceMock.get).toHaveBeenCalledWith(
+        'ABSOLUTE_DIR_PATH_ROOT',
+        { infer: true },
+      );
+      expect(configServiceMock.get).toHaveBeenCalledWith('DIR_PATH_LOGS', {
+        infer: true,
+      });
+    });
+
+    it('should throw an error when DIR_PATH_LOGS is not defined', () => {
+      const mockRootPath = '/mock/root';
+      configServiceMock.get.mockImplementation((key) => {
+        if (key === 'ABSOLUTE_DIR_PATH_ROOT') return mockRootPath;
+        return undefined;
+      });
+
+      expect(() => service.getLogDirPath()).toThrow(Error);
+      expect(configServiceMock.get).toHaveBeenCalledWith('DIR_PATH_LOGS', {
+        infer: true,
+      });
+    });
+
+    it('should throw an error when ABSOLUTE_DIR_PATH_ROOT is not defined', () => {
+      const mockLogsPath = 'logs/path';
+      configServiceMock.get.mockImplementation((key) => {
+        if (key === 'DIR_PATH_LOGS') return mockLogsPath;
+        return undefined;
+      });
+
+      expect(() => service.getLogDirPath()).toThrow(Error);
+      expect(configServiceMock.get).toHaveBeenCalledWith(
+        'ABSOLUTE_DIR_PATH_ROOT',
+        { infer: true },
+      );
+    });
+  });
 });

@@ -36,4 +36,18 @@ export class DirectoryLocationService {
 
     return path.resolve(this.getRootDirPath(), storageDirPath);
   }
+
+  getLogDirPath(): string {
+    const logsDirPath = this.configService.get<string>('DIR_PATH_LOGS', {
+      infer: true,
+    });
+
+    // {infer: true} option should deal with validating string,
+    // but for typescript's sake, this needs to stay here
+    if (typeof logsDirPath !== 'string') {
+      throw new Error();
+    }
+
+    return path.resolve(this.getRootDirPath(), logsDirPath);
+  }
 }
