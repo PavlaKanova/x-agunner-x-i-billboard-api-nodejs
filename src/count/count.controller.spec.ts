@@ -1,24 +1,22 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CountController } from './count.controller';
-import { RedisFacadeService } from '../redis/redis-facade.service';
-
-jest.mock('../redis/redis-facade.service');
+import { CountService } from './count.service';
 
 describe('CountController', () => {
   let controller: CountController;
-  let redisFacadeServiceMock: RedisFacadeService;
+  let countServiceMock: Partial<CountService>;
 
   beforeEach(async () => {
-    redisFacadeServiceMock = {
+    countServiceMock = {
       getCount: jest.fn(),
-    } as unknown as RedisFacadeService;
+    };
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [CountController],
       providers: [
         {
-          provide: RedisFacadeService,
-          useValue: redisFacadeServiceMock,
+          provide: CountService,
+          useValue: countServiceMock,
         },
       ],
     }).compile();
@@ -31,16 +29,14 @@ describe('CountController', () => {
   });
 
   describe('count', () => {
-    it('should return the count from RedisFacadeService when valid', async () => {
+    it('should return the count from CountService', async () => {
       const mockCount = 42;
-      (redisFacadeServiceMock.getCount as jest.Mock).mockResolvedValue(
-        mockCount,
-      );
+      (countServiceMock.getCount as jest.Mock).mockResolvedValue(mockCount);
 
       const result = await controller.count();
 
       expect(result).toBe(mockCount);
-      expect(redisFacadeServiceMock.getCount).toHaveBeenCalled();
+      expect(countServiceMock.getCount).toHaveBeenCalled();
     });
   });
 });

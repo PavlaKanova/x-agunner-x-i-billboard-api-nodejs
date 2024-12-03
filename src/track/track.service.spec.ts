@@ -1,34 +1,39 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TrackService } from './track.service';
-import { FileService } from '../file/file.service';
 import { TrackRequestDto } from './dto/track-request.dto';
-import { DirectoryLocationService } from '../directory-location/directory-location.service';
+import {
+  REQUEST_CONTENT_STORAGE,
+  RequestContentStorage,
+} from './request-content-storage.interface';
+import {
+  INCREMENT_COUNT_STORAGE,
+  IncrementCountStorage,
+} from './increment-count-storage.interface';
 
 describe('TrackService', () => {
   let service: TrackService;
-  let fileServiceMock: jest.Mocked<FileService>;
-  let directoryLocationMock: Partial<DirectoryLocationService>;
+  let requestContentStorageMock: jest.Mocked<RequestContentStorage>;
+  let countStorageMock: jest.Mocked<IncrementCountStorage>;
 
   beforeEach(async () => {
-    fileServiceMock = {
+    requestContentStorageMock = {
       append: jest.fn(),
     };
 
-    directoryLocationMock = {
-      getStorageDirPath: jest.fn().mockReturnValue('/mock/storage/path'),
-      getRootDirPath: jest.fn(), // Not used in this test
+    countStorageMock = {
+      incrementCount: jest.fn(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         TrackService,
         {
-          provide: FileService,
-          useValue: fileServiceMock,
+          provide: REQUEST_CONTENT_STORAGE,
+          useValue: requestContentStorageMock,
         },
         {
-          provide: DirectoryLocationService,
-          useValue: directoryLocationMock,
+          provide: INCREMENT_COUNT_STORAGE,
+          useValue: countStorageMock,
         },
       ],
     }).compile();
@@ -40,36 +45,49 @@ describe('TrackService', () => {
     expect(service).toBeDefined();
   });
 
-  it('should call append method of FileService with the correct path and data', async () => {
-    const trackRequestDto: TrackRequestDto = {
-      id: 1,
-      count: 42,
-      content: 'some testing content',
-    };
+  describe('appendContent', () => {
+    it('should call appendContent method on RequestContentStorage with the correct data', async () => {
+      const trackRequestDto: TrackRequestDto = {
+        id: 1,
+        count: 42,
+        content: 'some testing content',
+      };
 
-    const jsonLine = JSON.stringify(trackRequestDto) + '\n';
-    const expectedFilePath = '/mock/storage/path/track-request.log';
+      const expectedJsonLine = JSON.stringify(trackRequestDto) + '\n';
 
-    await service.appendToFile(trackRequestDto);
+      await service.appendContent(trackRequestDto);
 
-    expect(directoryLocationMock.getStorageDirPath).toHaveBeenCalledTimes(1);
-    expect(fileServiceMock.append).toHaveBeenCalledWith(
-      expectedFilePath,
-      jsonLine,
-    );
+      expect(requestContentStorageMock.append).toHaveBeenCalledTimes(1);
+      expect(requestContentStorageMock.append).toHaveBeenCalledWith(
+        expectedJsonLine,
+      );
+    });
   });
 
-  it('should throw an error if FileService.append fails', async () => {
-    const trackRequestDto: TrackRequestDto = {
-      id: 1,
-      count: 42,
-      content: 'some testing content',
-    };
+  describe('incrementCount', () => {
+    it('should call countStorage.incrementCount with the correct count when count is a number', async () => {
+      const trackRequestDto: TrackRequestDto = {
+        id: 1,
+        count: 42,
+        content: 'test content',
+      };
 
-    const error = new Error('File append failed');
-    fileServiceMock.append.mockRejectedValueOnce(error);
+      await service.incrementCount(trackRequestDto);
 
-    await expect(service.appendToFile(trackRequestDto)).rejects.toThrow(error);
-    expect(directoryLocationMock.getStorageDirPath).toHaveBeenCalledTimes(1);
+      expect(countStorageMock.incrementCount).toHaveBeenCalledWith(42);
+      expect(countStorageMock.incrementCount).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not call countStorage.incrementCount if count is not a number', async () => {
+      const trackRequestDto: TrackRequestDto = {
+        id: 1,
+        count: 'invalid' as unknown as number,
+        content: 'test content',
+      };
+
+      await service.incrementCount(trackRequestDto);
+
+      expect(countStorageMock.incrementCount).not.toHaveBeenCalled();
+    });
   });
 });

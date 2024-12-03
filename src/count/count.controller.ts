@@ -1,12 +1,12 @@
 import { Controller, Get } from '@nestjs/common';
-import { RedisFacadeService } from '../redis/redis-facade.service';
+import { CountService } from './count.service';
 
 @Controller('count')
 export class CountController {
-  constructor(readonly redisFacadeService: RedisFacadeService) {}
+  constructor(readonly countService: CountService) {}
 
   @Get()
   async count(): Promise<number> {
-    return await this.redisFacadeService.getCount();
+    return await this.countService.getCount();
   }
 }

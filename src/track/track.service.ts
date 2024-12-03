@@ -1,28 +1,31 @@
-import { Injectable } from '@nestjs/common';
-import * as path from 'path';
-import { FileService } from '../file/file.service';
+import { Inject, Injectable } from '@nestjs/common';
 import { TrackRequestDto } from './dto/track-request.dto';
-import { DirectoryLocationService } from '../directory-location/directory-location.service';
+import {
+  INCREMENT_COUNT_STORAGE,
+  IncrementCountStorage,
+} from './increment-count-storage.interface';
+import {
+  REQUEST_CONTENT_STORAGE,
+  RequestContentStorage,
+} from './request-content-storage.interface';
 
 @Injectable()
 export class TrackService {
   constructor(
-    readonly fileService: FileService,
-    readonly directoryLocation: DirectoryLocationService,
+    @Inject(REQUEST_CONTENT_STORAGE)
+    private readonly requestContentStorage: RequestContentStorage,
+    @Inject(INCREMENT_COUNT_STORAGE)
+    private readonly countStorage: IncrementCountStorage,
   ) {}
 
-  /**
-   * Saves the data as a single-line JSON to the log file.
-   * @param trackRequestDto - Data to be saved.
-   */
-  async appendToFile(trackRequestDto: TrackRequestDto): Promise<void> {
+  async appendContent(trackRequestDto: TrackRequestDto): Promise<void> {
     const jsonLine = JSON.stringify(trackRequestDto) + '\n';
-    await this.fileService.append(
-      path.resolve(
-        this.directoryLocation.getStorageDirPath(),
-        'track-request.log',
-      ),
-      jsonLine,
-    );
+    await this.requestContentStorage.append(jsonLine);
+  }
+
+  async incrementCount(trackRequestDto: TrackRequestDto): Promise<void> {
+    if (typeof trackRequestDto.count === 'number') {
+      await this.countStorage.incrementCount(trackRequestDto.count);
+    }
   }
 }
