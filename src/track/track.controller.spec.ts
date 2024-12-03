@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { TrackController } from './track.controller';
 import { TrackService } from './track.service';
 import { TrackRequestDto } from './dto/track-request.dto';
-import { ZodValidationPipe } from '../pipe/zod-validation.pipe';
+import { ZodValidationPipe } from '../component/pipe/zod-validation.pipe';
 
 describe('TrackController', () => {
   let controller: TrackController;

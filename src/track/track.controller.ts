@@ -1,7 +1,7 @@
 import { Body, Controller, Post, UsePipes } from '@nestjs/common';
 import { TrackRequestDto } from './dto/track-request.dto';
 import { TrackService } from './track.service';
-import { ZodValidationPipe } from '../pipe/zod-validation.pipe';
+import { ZodValidationPipe } from '../component/pipe/zod-validation.pipe';
 import { TrackRequestSchema } from './dto/track-request.schema';
 
 @Controller('track')

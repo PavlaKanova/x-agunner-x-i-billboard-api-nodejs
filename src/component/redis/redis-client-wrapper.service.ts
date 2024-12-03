@@ -3,10 +3,10 @@ import { RedisConfigService } from './redis-config.service';
 import { createClient, RedisClientType } from 'redis';
 import { FailedToIncreaseByException } from './exception/failed-to-increase-by.exception';
 import { FailedToGetValueException } from './exception/failed-to-get-value.exception';
-import { IncrementCountStorage } from '../track/increment-count-storage.interface';
+import { IncrementCountStorage } from '../../track/increment-count-storage.interface';
 import { RedisKey } from './redis-key.enum';
 import { CountIsNotANumberException } from './exception/count-is-not-a-number.exception';
-import { GetCountStorage } from '../track/get-count-storage.interface';
+import { GetCountStorage } from '../../track/get-count-storage.interface';
 
 @Injectable()
 export class RedisClientWrapperService

@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { CountController } from './count.controller';
-import { RedisModule } from '../redis/redis.module';
+import { RedisModule } from '../component/redis/redis.module';
 import { CountService } from './count.service';
-import { RedisClientWrapperService } from '../redis/redis-client-wrapper.service';
+import { RedisClientWrapperService } from '../component/redis/redis-client-wrapper.service';
 import { GET_COUNT_STORAGE } from '../track/get-count-storage.interface';
 
 @Module({
