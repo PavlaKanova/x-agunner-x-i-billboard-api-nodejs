@@ -8,6 +8,7 @@ import { RedisKey } from './redis-key.enum';
 import { CountIsNotANumberException } from './exception/count-is-not-a-number.exception';
 import { GetCountStorage } from '../../track/get-count-storage.interface';
 
+// REVIEW public/private
 @Injectable()
 export class RedisClientWrapperService
   implements IncrementCountStorage, GetCountStorage

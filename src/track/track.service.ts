@@ -23,6 +23,7 @@ export class TrackService {
     await this.requestContentStorage.append(jsonLine);
   }
 
+  // REVIEW Proc se testuje cislo, i kdyz count muze byt pouze cislo | null
   async incrementCount(trackRequestDto: TrackRequestDto): Promise<void> {
     if (typeof trackRequestDto.count === 'number') {
       await this.countStorage.incrementCount(trackRequestDto.count);

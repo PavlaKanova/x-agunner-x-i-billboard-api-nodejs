@@ -6,6 +6,7 @@ import { UnableToAppendToFileException } from './exception/unable-to-append-to-f
 import { RequestContentStorage } from '../../track/request-content-storage.interface';
 import { DirectoryLocationService } from '../directory-location/directory-location.service';
 
+// REVIEW FileService je takový nic neříkající název. Představoval bych si něco, co bude říkat že se pro request storage využívá file system
 @Injectable()
 export class FileService implements RequestContentStorage {
   constructor(readonly directoryLocationService: DirectoryLocationService) {}

@@ -79,6 +79,7 @@ describe('TrackService', () => {
     });
 
     it('should not call countStorage.incrementCount if count is not a number', async () => {
+      // REVIEW: Pokud jsou typy spravne pouzity, toto by nemelo nikdy nastat
       const trackRequestDto: TrackRequestDto = {
         id: 1,
         count: 'invalid' as unknown as number,
