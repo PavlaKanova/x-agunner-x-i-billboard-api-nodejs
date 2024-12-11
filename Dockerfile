@@ -20,9 +20,11 @@ COPY . .
 # Build the application
 RUN npm run build
 
+# REVIEW: Nefunkční development pro usery s jiným id než 1000
 # Ensure the app folder and files are owned by 'node'
-RUN chown -R node:node /app
+# RUN chown -R node:node /app
 
+# REVIEW: Nefunkční development pro usery s jiným id než 1000
 # Switch to the 'node' user (UID: 1000, GID: 1000) for non-root execution
-USER node
+# USER node
 

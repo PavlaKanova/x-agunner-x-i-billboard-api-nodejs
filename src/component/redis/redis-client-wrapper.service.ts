@@ -15,6 +15,7 @@ export class RedisClientWrapperService
   private client: RedisClientType;
 
   constructor(private readonly redisConfigService: RedisConfigService) {
+    // redisConfigService nemusí být na thisu.
     this.client = createClient({
       url: redisConfigService.url,
     });
@@ -37,6 +38,7 @@ export class RedisClientWrapperService
   }
 
   async getCount(): Promise<number> {
+    // REVIEW: Dalo by se napsat bez letu.
     let count: string | null = null;
 
     try {
