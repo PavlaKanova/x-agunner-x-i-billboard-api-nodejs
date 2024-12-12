@@ -16,7 +16,7 @@ export class RedisClientWrapperService
   private client: RedisClientType;
 
   constructor(private readonly redisConfigService: RedisConfigService) {
-    // redisConfigService nemusí být na thisu.
+    // REVIEW: redisConfigService nemusí být na thisu.
     this.client = createClient({
       url: redisConfigService.url,
     });
