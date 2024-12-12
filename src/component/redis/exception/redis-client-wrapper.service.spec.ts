@@ -6,7 +6,7 @@ import { RedisKey } from '../redis-key.enum';
 import { FailedToIncreaseByException } from './failed-to-increase-by.exception';
 import { FailedToGetValueException } from './failed-to-get-value.exception';
 import { CountIsNotANumberException } from './count-is-not-a-number.exception';
-
+// REVIEW spatne slozka?
 jest.mock('redis', () => ({
   createClient: jest.fn(),
 }));

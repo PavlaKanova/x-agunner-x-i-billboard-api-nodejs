@@ -8,6 +8,7 @@ export class ZodValidationPipe implements PipeTransform {
     try {
       return this.schema.parse(value);
     } catch (error) {
+      // REVIEW: naformatovat message a ne neexistujici errorMessage
       throw new BadRequestException(`Validation failed: ${error.errorMessage}`);
     }
   }

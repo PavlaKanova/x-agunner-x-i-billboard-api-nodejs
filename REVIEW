@@ -1,6 +1,16 @@
 Pros:
--
+- Pouziti init/destroy
+- Error handling
+- Logger
+- Podrobne testy na jednotlive male casti aplikace
+- Interfaces pro tridy (Dependency Inversion)/Pouziti typu
+- linter/formatter
+- Storage v gitignore
+- Použití frameworku.
+- Použití dockeru.
+- Validace vstupů
 
 Cons:
 - Kdyz je poslan track request s invalidnimi daty, neni receno proc je request invalidni
 - Neatomická inkrementace countu v Redisu.
+- Naming a struktura by mohly byt lepsi/jasnejsi
