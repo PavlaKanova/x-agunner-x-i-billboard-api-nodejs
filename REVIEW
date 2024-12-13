@@ -12,5 +12,4 @@ Pros:
 
 Cons:
 - Kdyz je poslan track request s invalidnimi daty, neni receno proc je request invalidni
-- Neatomická inkrementace countu v Redisu.
 - Naming a struktura by mohly byt lepsi/jasnejsi
